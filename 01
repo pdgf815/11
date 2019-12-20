@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>11</title>
+	<style>
+		.div1{
+			position: absolute;
+			left: 0px;
+			top: 0px;
+			height: 50px;
+			width: 50px;
+			background-color: #ccc;
+
+		}
+		.img1{
+			position: absolute;
+			width: 50px;
+			height: 50px;
+			display: none;
+			
+
+
+		}
+		.run{
+			transform: translate(100px,0px);
+		}
+		.xiang{
+			position: absolute;
+			left: 400px;
+			top: 500px;
+			font-size: 100px;
+		}
+		.long{
+			position: absolute;
+			left: 550px;
+			top: 500px;
+			font-size: 100px;
+		}
+		.zhang{
+			position: absolute;
+			left: 700px;
+			top: 500px;
+			font-size: 100px;
+		}
+	</style>
+</head>
+<body>
+
+	<div class="div1"></div>
+	<img src="..\images\longtt.gif" alt="" class="img1">
+
+	
+	
+	<script>
+		var div = document.querySelector("div");
+		function move(){
+			document.addEventListener("keydown",function(e){
+			console.log(e.keyCode);
+			if(e.keyCode == 37){
+				div.style.left = div.offsetLeft - 10 + "px";
+			} else if(e.keyCode == 39){
+				div.style.left = div.offsetLeft + 10 + "px";
+			}
+			else if(e.keyCode == 38){
+				div.style.top = div.offsetTop - 10 + "px";
+			}
+			else if(e.keyCode == 40){
+				div.style.top = div.offsetTop + 10 + "px";
+			}
+			else {
+				return false;
+			}
+
+		})
+
+		}
+		move();
+		var img1 = document.querySelector(".img1");
+		
+		// document.addEventListener("keydown",function(e){
+		// 	if(e.keyCode == 39){
+				
+				
+				
+		// 	}
+		// });
+		//为什么么有清除定时器
+		document.addEventListener("keyup",function(e){
+			console.log(e.keyCode);
+			if(e.keyCode == 82){
+				if(timer != null){
+					clearInterval(timer);
+					timer = null;
+				}else{
+				img1.style.left = div.offsetLeft + "px";
+				img1.style.top = div.offsetTop + "px";
+				img1.style.display = "block";
+				
+				var timer = setInterval(function(){
+					var x = img1.offsetLeft;
+					var y = img1.offsetTop;
+					img1.style.top = y -10 +"px";
+				},30)
+
+				}
+				
+			}
+		});
+		
+		
+	</script>
+</body>
+</html>
