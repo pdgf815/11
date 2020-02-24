@@ -1,114 +1,187 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-	<title>11</title>
+	<meta charset="UTF-8">
+	<title>Document</title>
 	<style>
-		.div1{
-			position: absolute;
-			left: 0px;
-			top: 0px;
-			height: 50px;
-			width: 50px;
-			background-color: #ccc;
-
+		canvas{
+			display: block;
+			border:1px solid red;
+			margin: 0 auto;
 		}
-		.img1{
-			position: absolute;
-			width: 50px;
-			height: 50px;
-			display: none;
-			
-
-
+		div{
+			margin-left: 230px;
 		}
-		.run{
-			transform: translate(100px,0px);
-		}
-		.xiang{
+		.wallPic{
+			width: 100px;
+			height:485px;
+			background-image: url(../images/wall.jpg);
 			position: absolute;
-			left: 400px;
-			top: 500px;
-			font-size: 100px;
-		}
-		.long{
-			position: absolute;
-			left: 550px;
-			top: 500px;
-			font-size: 100px;
-		}
-		.zhang{
-			position: absolute;
-			left: 700px;
-			top: 500px;
-			font-size: 100px;
+			left: 20px;
+			top:20px;
+			background-repeat: repeat-y;
+			z-index: 999;
 		}
 	</style>
+
 </head>
 <body>
+	<div class="wallPic"></div>
+	<canvas id="canvas" width="800" height="500">浏览器支持</canvas>
+	<div>	
 
-	<div class="div1"></div>
-	<img src="longtt.gif" alt="" class="img1">
-
-	
-	
+			<button >向下走</button>
+			<button ">向左走</button>
+			<button >向右走</button>
+			<button >向上走</button>
+			<button class="fabo">发波</button>
+			
+	</div>
 	<script>
-		var div = document.querySelector("div");
-		function move(){
-			document.addEventListener("keydown",function(e){
-			console.log(e.keyCode);
-			if(e.keyCode == 37){
-				div.style.left = div.offsetLeft - 10 + "px";
-			} else if(e.keyCode == 39){
-				div.style.left = div.offsetLeft + 10 + "px";
-			}
-			else if(e.keyCode == 38){
-				div.style.top = div.offsetTop - 10 + "px";
-			}
-			else if(e.keyCode == 40){
-				div.style.top = div.offsetTop + 10 + "px";
-			}
-			else {
-				return false;
-			}
+		var canvas = document.querySelector("canvas");
+		var ctx = canvas.getContext("2d");
+		// ctx.beginPath;
+		// ctx.moveTo(110,110);
+		// ctx.lineTo(220,220);
+		// ctx.stroke();
+	
+		
+		function Game(){
+			//加载图片
+			var that = this;
+			this.image = new Image();
+			this.image.src = "../images/01.png";
+			this.image.onload = function(){
 
-		})
+			this.flag = 2;
+			that.run();
+			this.timer;
+
+
+			
 
 		}
-		move();
-		var img1 = document.querySelector(".img1");
-		
-		// document.addEventListener("keydown",function(e){
-		// 	if(e.keyCode == 39){
-				
-				
-				
-		// 	}
-		// });
-		//为什么么有清除定时器
-		var timer = null;
-		document.addEventListener("keyup",function(e){
-			console.log(e.keyCode);
-			if(e.keyCode == 82){
-				if(timer != null){
-					clearInterval(timer);
-					timer = null;
-				}else{
-				img1.style.left = div.offsetLeft + "px";
-				img1.style.top = div.offsetTop + "px";
-				img1.style.display = "block";
-				
-				 timer = setInterval(function(){
-					var x = img1.offsetLeft;
-					var y = img1.offsetTop;
-					img1.style.top = y -10 +"px";
-				},30)
+			this.moon = new Person(100,100);
+	}
+		Game.prototype = {
+			//主循环,具体的业务
+			mainloop : function(){
+				ctx.clearRect(0,0,canvas.width,canvas.height);
+				this.moon.judge();
+				this.moon.update();
+				this.moon.render();
+			
+		},
 
-				}
-				
+			//开始主循环
+			run : function(){
+				var that = this;
+				this.timer = setInterval(function(){
+					that.mainloop();
+				},100);
+
+			},
+			stop : function(){
+				clearInterval(this.timer);
+			},
+			fabo : function(){
+				var image1 = new Image();
+				image1.src = "../images/bo.jpg";
+
+				// image1.style.left = this.moon.offsetLeft + "px";
+				// image1.style.top = this.moon.offsetTop + "px";
+				setInterval(function(){
+					ctx.drawImage(image1,this.moon.offsetLeft,this.moon.offsetTop,10,10);
+					this.moon.top = this.moon.offsetTop -5 + "px";
+				},50);
+				console.log(this.moon.offsetLeft);
 			}
-		});
+
+		}
+			
+		function Person(x,y){
+			this.x = x;
+			this.y = y;
+			this.state = 0;
+			
+		}
+	
 		
+		//判断flag值,按住移动，松开停止
+		Person.prototype.judge = function(){
+			var btns = document.querySelectorAll("button");
+			that = this;
+			btns[0].addEventListener("mousedown",function(){
+				game.stop();
+				game.run();
+				that.flag = 0;
+				btns[0].addEventListener("mouseup",function(){
+					game.stop();
+				})
+
+			});
+			btns[1].addEventListener("mousedown",function(){
+				game.stop();
+				game.run();
+				that.flag = 1;
+				btns[1].addEventListener("mouseup",function(){
+					game.stop();
+				})
+			});
+			btns[2].addEventListener("mousedown",function(){
+				game.stop();
+				game.run();
+				that.flag = 2;
+				btns[2].addEventListener("mouseup",function(){
+					game.stop();
+				})
+			});
+			btns[3].addEventListener("mousedown",function(){
+				game.stop();
+				game.run();
+				that.flag = 3;
+				btns[3].addEventListener("mouseup",function(){
+					game.stop();
+				})
+			})
+		}
+		//更新自己
+		Person.prototype.update = function(){
+			this.state ++;
+			if(that.state > 2){
+				this.state = 0;
+			}
+			if (that.flag == 0){
+				this.y+=2;
+			}
+			else if (that.flag == 1){
+				this.x-=2;
+			}
+			else if (that.flag == 2){
+				this.x+=2;
+			}
+			else {
+				this.y-=2;
+			}
+		}
+		//渲染
+		Person.prototype.render = function(){	
+			ctx.drawImage(game.image,this.state * 32, 32 * this.flag, 32,32,this.x,this.y,32,32);
+		}
 		
+		var game = new Game();
+		var fabo = document.querySelector(".fabo");
+		fabo.addEventListener("click",function(){
+			game.fabo();
+		})
+			
+
+		
+			
+		
+	
+	
+
 	</script>
 </body>
 </html>
